@@ -1,0 +1,21 @@
+.card {
+  height: 100%;
+}
+
+[role='listitem'] {
+  span {
+    width: 42px;
+    height: 42px;
+    margin-right: 20px;
+    padding-top: 11px;
+
+    background-color: brown;
+    color: white;
+    border: none;
+    border-radius: 50%;
+
+
+    text-align: center;
+    vertical-align: center;
+  }
+}
