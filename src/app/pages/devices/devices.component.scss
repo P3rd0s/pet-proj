@@ -1,0 +1,39 @@
+table {
+  width: 100%;
+}
+
+@media (max-width: 550px) {
+  .find-box {
+    flex-direction: column;
+    align-items: center !important;
+    justify-content: center !important;
+    padding-bottom: 20px;
+  }
+
+}
+
+.find-box {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+
+
+  .search-wrapper {
+    padding-top: 15px;
+  }
+  .headers-align {
+    flex-basis: 0;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 25px;
+
+    min-width: 60vw;
+
+    .description-panel{
+      justify-content: space-between;
+    }
+  }
+}
+
+

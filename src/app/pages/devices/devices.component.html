@@ -1,0 +1,70 @@
+<div class="find-box">
+  <mat-form-field class="form-field" appearance="fill">
+    <mat-label>Search...</mat-label>
+    <input matInput type="text" [(ngModel)]="searchText" (ngModelChange)="changeTable(this.defaultSort, searchText)">
+    <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear"
+            (click)="searchText='';changeTable(this.defaultSort, searchText)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+
+  <mat-accordion class="headers-align" multi
+                 matBadge="8" matBadgePosition="before" matBadgeColor="warn">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Set up filters
+        </mat-panel-title>
+        <mat-panel-description class="description-panel">
+          Type your filters
+          <mat-icon>filter_list</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <mat-form-field appearance="fill">
+        <mat-label>First name</mat-label>
+        <input matInput>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Age</mat-label>
+        <input matInput type="number" min="1">
+      </mat-form-field>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</div>
+
+<div class="mat-elevation-z5">
+
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="changeTable($event, searchText)">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> No.</th>
+      <td mat-cell *matCellDef="let device"> {{device.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="deviceName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name</th>
+      <td mat-cell *matCellDef="let device"> {{device.deviceName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="rating">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Rating</th>
+      <td mat-cell *matCellDef="let device"> {{device.rating}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Price</th>
+      <td mat-cell *matCellDef="let device"> {{device.price}} </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
