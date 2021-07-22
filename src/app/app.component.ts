@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {ServerResponses} from "../environments/Data";
 import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({

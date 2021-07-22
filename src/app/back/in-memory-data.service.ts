@@ -33,6 +33,30 @@ export class InMemoryDataService implements InMemoryDbService{
         availability: Available.notAvailable,
         soldPieces: 212,
         rating: 3.8
+      },
+      {
+        id: 14,
+        deviceName: 'Macbook Air',
+        price: 2999,
+        availability: Available.available,
+        soldPieces: 48,
+        rating: 4.9
+      },
+      {
+        id: 15,
+        deviceName: 'Macbook Pro',
+        price: 3599,
+        availability: Available.expected,
+        soldPieces: 14,
+        rating: 4.8
+      },
+      {
+        id: 16,
+        deviceName: 'HP Omen',
+        price: 1099,
+        availability: Available.available,
+        soldPieces: 292,
+        rating: 4.2
       }
     ];
 
