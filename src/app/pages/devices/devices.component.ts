@@ -35,14 +35,6 @@ export class DevicesComponent implements OnInit, OnDestroy {
     rating: {from: 0, to:5}
   };
 
-  filterDevice: Device = {
-    id: -1,
-    deviceName: '',
-    price: -1,
-    availability: -1,
-    soldPieces: -1,
-    rating: -1
-  };
   devicesAvails = new FormControl();
   devicesAvailableList: string[] = ['Available', 'Expected', 'Not available'];
 
@@ -64,24 +56,26 @@ export class DevicesComponent implements OnInit, OnDestroy {
   }
 
   resetFilters() {
-    this.filterDevice = {
-      id: -1,
-      deviceName: '',
-      price: -1,
-      availability: -1,
-      soldPieces: -1,
-      rating: -1
+    this.filterOptions = {
+      name: '',
+      price: {from: 0, to:9999},
+      availability: [],
+      soldPieces: {from: 0, to:9999},
+      rating: {from: 0, to:5}
     };
   }
-  activeFilters(): number {
-    let isEmptyFilters: any = this.filterDevice;
-    const keys = Object.keys(isEmptyFilters).filter(key => {
-      if(key === 'deviceName') return  isEmptyFilters[key] !== '';
-      return isEmptyFilters[key] >= 0;
-    });
 
-    return keys.length;
-  }
+  activeFilters(): number {
+    let active = 0;
+    this.filterOptions.name !== '' ? active++ : {};
+    this.filterOptions.price.from!=0 || this.filterOptions.price.to!=9999 ? active++ : {};
+    this.filterOptions.availability.length !==0 ? active++ : {};
+    this.filterOptions.soldPieces.from !== 0 || this.filterOptions.soldPieces.to !== 9999 ? active++ : {};
+    this.filterOptions.rating.from!= 0 || this.filterOptions.rating.to != 5 ? active++ : {};
+
+    console.log(active);
+    return active;
+  };
 
   resetSearch() {
     this.searchText = '';
@@ -90,10 +84,9 @@ export class DevicesComponent implements OnInit, OnDestroy {
   tableHandler() {
     if(this.paginator) this.paginator.pageIndex = 0;
 
-    console.log(this.filterDevice);
 
     this.deviceService
-      .getParametrizedTable(this.sortBy, this.activeFilters() > 0 ? this.filterDevice: undefined, this.searchText)
+      .getParametrizedTable(this.sortBy, this.activeFilters() > 0 ? this.filterOptions: undefined, this.searchText)
       .subscribe(devices => {
 
             this.dataSource = new MatTableDataSource<Device>(devices);

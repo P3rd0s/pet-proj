@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HistoryService} from "./history.service";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable, of} from "rxjs";
-import {compare, Device} from "../interfaces/device";
+import {Available, compare, Device, FilterOptions} from "../interfaces/device";
 import {catchError, tap, map, take} from "rxjs/operators";
 import {Sort} from "@angular/material/sort";
 
@@ -19,7 +19,7 @@ export class DeviceService {
   }
 
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
 
@@ -32,35 +32,53 @@ export class DeviceService {
   }
 
 
-  getParametrizedTable(sort?: Sort, filter?: any, search?:string): Observable<Device[]> {
+  getParametrizedTable(sort?: Sort, filter?: FilterOptions, search?: string): Observable<Device[]> {
 
     return this.http.get<Device[]>(this.devicesURL).pipe(
-
       map(devices => {
         if (search)
-          return  devices.filter((d: Device) => (d.deviceName.toLowerCase().indexOf(search) !== -1
-          || d.rating.toString().toLowerCase().indexOf(search) !== -1
-          || d.price.toString().toLowerCase().indexOf(search) !== -1))
+          return devices.filter((d: Device) => (d.deviceName.toLowerCase().indexOf(search) !== -1
+            || d.rating.toString().toLowerCase().indexOf(search) !== -1
+            || d.price.toString().toLowerCase().indexOf(search) !== -1))
 
-        else if(filter) {
-          //Check filter fields (strings handles personally)
-          const keys = Object.keys(filter).filter(key => {
-            if(key === 'deviceName') return  filter[key] !== '';
-            return filter[key] >= 0;
+        else if (filter) {
+          //Hardcode instead backend
+          return devices.filter((d: Device) => {
+
+            if(filter.name !== '') {
+              if(d.deviceName.toLowerCase().indexOf(filter.name.toLowerCase()) === -1) return false
+            }
+
+            if(filter.price.from!=0 || filter.price.to!=9999) {
+              if(d.price < filter.price.from || d.price > filter.price.to) return false;
+            }
+
+            if(filter.availability.length !== 0) {
+              let isOk = false;
+              for(let i of filter.availability) {
+                if(d.availability === i) {
+                  isOk = true; break;
+                }
+              }
+              if(!isOk) return false;
+            }
+
+            if(filter.soldPieces.from !== 0 || filter.soldPieces.to !== 9999) {
+              if(d.soldPieces < filter.soldPieces.from || d.soldPieces > filter.soldPieces.to) return false;
+            }
+
+            if(filter.rating.from!= 0 || filter.rating.to != 5) {
+              if(d.rating < filter.rating.from || d.rating > filter.rating.to) return false;
+            }
+
+            return true;
           });
-
-          //Filter function (pre-alpha)
-          const filterDevice = (dev:any) =>
-            keys.every(key => dev[key].toString().toLowerCase().indexOf(filter[key]) !== -1);
-
-          return keys.length ? devices.filter(filterDevice) : devices;
-        }
-        else return devices;
+        } else return devices;
       }),
 
 
       map(devices => sort
-        ? devices.sort((d1:any, d2:any) => compare(d1[sort.active], d2[sort.active], sort.direction === 'asc'))
+        ? devices.sort((d1: any, d2: any) => compare(d1[sort.active], d2[sort.active], sort.direction === 'asc'))
         : devices),
 
       take<Device[]>(1)
@@ -68,17 +86,15 @@ export class DeviceService {
   }
 
 
-
-  getDevices(): Observable<Device[]>{
+  getDevices(): Observable<Device[]> {
     return this.http.get<Device[]>(this.devicesURL).pipe(
       tap(() => this.log('get devices')),
-      catchError(this.handleError<Device[]>('get devices',[]))
+      catchError(this.handleError<Device[]>('get devices', []))
     );
   }
 
 
-
-  getDevice(id: number): Observable<Device>{
+  getDevice(id: number): Observable<Device> {
     const deviceURL = `${this.devicesURL}/${id}`;
     return this.http.get<Device>(deviceURL).pipe(
       tap(() => this.log(`get device id=${id}`)),
@@ -87,8 +103,7 @@ export class DeviceService {
   }
 
 
-
-  updateDevice(device: Device): Observable<any>{
+  updateDevice(device: Device): Observable<any> {
     return this.http.put(this.devicesURL, device, this.httpOptions).pipe(
       tap(() => this.log(`updated device id=${device.id}`)),
       catchError(this.handleError<any>(`update device id=${device.id}`))
@@ -96,8 +111,7 @@ export class DeviceService {
   }
 
 
-
-  addDevice(device:Device):Observable<Device>{
+  addDevice(device: Device): Observable<Device> {
     return this.http.post<Device>(this.devicesURL, device, this.httpOptions).pipe(
       tap((newDevice: Device) => this.log(`added device id=${newDevice.id}`)),
       catchError(this.handleError<any>(`added device id=${device.id}`))
@@ -105,8 +119,7 @@ export class DeviceService {
   }
 
 
-
-  deleteDevice(id: number):Observable<Device>{
+  deleteDevice(id: number): Observable<Device> {
     const deviceURL = `${this.devicesURL}/${id}`;
     return this.http.delete<Device>(deviceURL, this.httpOptions).pipe(
       tap(() => this.log(`deleted device id=${id}`)),
@@ -115,5 +128,6 @@ export class DeviceService {
   }
 
   constructor(private http: HttpClient,
-              private historyService: HistoryService) { }
+              private historyService: HistoryService) {
+  }
 }
