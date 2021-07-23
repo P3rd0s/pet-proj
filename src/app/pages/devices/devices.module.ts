@@ -7,12 +7,14 @@ import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
 import {MatFormFieldModule} from "@angular/material/form-field";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
 import {MatBadgeModule} from "@angular/material/badge";
 import {MatExpansionModule} from "@angular/material/expansion";
+import {MatSliderModule} from "@angular/material/slider";
+import {MatSelectModule} from "@angular/material/select";
 
 
 @NgModule({
@@ -31,7 +33,10 @@ import {MatExpansionModule} from "@angular/material/expansion";
     MatButtonModule,
     MatInputModule,
     MatBadgeModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSliderModule,
+    MatSelectModule,
+    ReactiveFormsModule
 
   ]
 })

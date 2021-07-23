@@ -3,7 +3,8 @@ import {HistoryService} from "./history.service";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable, of} from "rxjs";
 import {compare, Device} from "../interfaces/device";
-import {catchError, tap, map} from "rxjs/operators";
+import {catchError, tap, map, take} from "rxjs/operators";
+import {Sort} from "@angular/material/sort";
 
 
 @Injectable({
@@ -31,21 +32,38 @@ export class DeviceService {
   }
 
 
+  getParametrizedTable(sort?: Sort, filter?: any, search?:string): Observable<Device[]> {
 
-  getDevicesBy(sortedBy: string, isAbs: boolean, search: string): Observable<Device[]> {
     return this.http.get<Device[]>(this.devicesURL).pipe(
-      tap(() => this.log(`get devices sorted by ${sortedBy}`)),
-      catchError(this.handleError<Device[]>('get sorted devices',[])),
-      map(devices => devices.filter((d:Device) => {
 
-        return search
-        ? (d.deviceName.toLowerCase().indexOf(search) !== -1
+      map(devices => {
+        if (search)
+          return  devices.filter((d: Device) => (d.deviceName.toLowerCase().indexOf(search) !== -1
           || d.rating.toString().toLowerCase().indexOf(search) !== -1
-          || d.price.toString().toLowerCase().indexOf(search) !== -1)
-        : true;
-      })
-        //Sorting every time, if we not need this?
-        .sort((d1:any, d2:any) => compare(d1[sortedBy], d2[sortedBy], isAbs)))
+          || d.price.toString().toLowerCase().indexOf(search) !== -1))
+
+        else if(filter) {
+          //Check filter fields (strings handles personally)
+          const keys = Object.keys(filter).filter(key => {
+            if(key === 'deviceName') return  filter[key] !== '';
+            return filter[key] >= 0;
+          });
+
+          //Filter function (pre-alpha)
+          const filterDevice = (dev:any) =>
+            keys.every(key => dev[key].toString().toLowerCase().indexOf(filter[key]) !== -1);
+
+          return keys.length ? devices.filter(filterDevice) : devices;
+        }
+        else return devices;
+      }),
+
+
+      map(devices => sort
+        ? devices.sort((d1:any, d2:any) => compare(d1[sort.active], d2[sort.active], sort.direction === 'asc'))
+        : devices),
+
+      take<Device[]>(1)
     );
   }
 
