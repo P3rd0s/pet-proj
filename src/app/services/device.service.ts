@@ -35,6 +35,10 @@ export class DeviceService {
   getParametrizedTable(sort?: Sort, filter?: FilterOptions, search?: string): Observable<Device[]> {
 
     return this.http.get<Device[]>(this.devicesURL).pipe(
+
+      tap(() => this.log('get devices table with filters/sort/search')),
+      catchError(this.handleError<Device[]>('get devices table with filters/sort/search', [])),
+
       map(devices => {
         if (search)
           return devices.filter((d: Device) => (d.deviceName.toLowerCase().indexOf(search) !== -1

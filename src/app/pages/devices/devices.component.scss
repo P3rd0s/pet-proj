@@ -1,3 +1,4 @@
+
 table {
   width: 100%;
 }
@@ -12,6 +13,7 @@ table {
 
 }
 
+
 .find-box {
   display: flex;
   align-items: flex-start;
@@ -21,6 +23,7 @@ table {
   .search-wrapper {
     padding-top: 15px;
   }
+
   .headers-align {
     flex-basis: 0;
     justify-content: space-between;
@@ -29,10 +32,65 @@ table {
 
     min-width: 60vw;
 
-    .description-panel{
+    .description-panel {
       justify-content: space-between;
     }
   }
 }
 
+::ng-deep {
+  .mat-expansion-panel-body {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
 
+  .name-form-field {
+    padding-top: 12px;
+  }
+}
+
+
+//SLIDERS, LATER WILL BE COMPLETE WITH ANGULAR THEMING
+// We need to use ::ng-deep to overcome view encapsulation
+::ng-deep {
+
+
+  .custom-slider {
+    width: 150px;
+    text-align: center;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-bar {
+    left: 5.5px !important;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-bar {
+    background: #8b8b8b;
+    height: 2px;
+
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-selection {
+    background: #673ab7;
+
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-pointer {
+    background-color: #f0f0f0;
+    transform: scale(0.65);
+  }
+
+  //.custom-slider .ngx-slider-model-value {
+  //  right: 7px !important;
+  //}
+  //
+  //.custom-slider .ngx-slider-model-high {
+  //  right: 137px !important;
+  //}
+
+  .custom-slider .ngx-slider .ngx-slider-pointer:after {
+    background-color: #673ab7;
+  }
+
+}

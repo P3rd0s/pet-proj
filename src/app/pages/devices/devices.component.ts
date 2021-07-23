@@ -72,8 +72,6 @@ export class DevicesComponent implements OnInit, OnDestroy {
     this.filterOptions.availability.length !==0 ? active++ : {};
     this.filterOptions.soldPieces.from !== 0 || this.filterOptions.soldPieces.to !== 9999 ? active++ : {};
     this.filterOptions.rating.from!= 0 || this.filterOptions.rating.to != 5 ? active++ : {};
-
-    console.log(active);
     return active;
   };
 

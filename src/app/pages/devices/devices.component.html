@@ -22,7 +22,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <mat-form-field class="form-field" appearance="fill">
+      <mat-form-field class="name-form-field" appearance="fill">
         <mat-label>Device name</mat-label>
         <input matInput type="text" [(ngModel)]="filterOptions.name" (ngModelChange)="resetSearch();tableHandler()">
         <button *ngIf="filterOptions.name" matSuffix mat-icon-button aria-label="Clear"
@@ -31,14 +31,59 @@
         </button>
       </mat-form-field>
 
-      <mat-form-field class="form-field" appearance="fill">
-        <mat-label>Price</mat-label>
-        <input matInput type="number" [(ngModel)]="filterOptions.price.from" (ngModelChange)="resetSearch();tableHandler()">
-        <button *ngIf="filterOptions.price.from" matSuffix mat-icon-button aria-label="Clear"
-                (click)="filterOptions.price.from = 0;tableHandler()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
+      <!--      <mat-form-field class="form-field" appearance="fill">-->
+      <!--        <mat-label>Price</mat-label>-->
+      <!--        <input matInput type="number" [(ngModel)]="filterOptions.price.from"-->
+      <!--               (ngModelChange)="resetSearch();tableHandler()">-->
+      <!--        <button *ngIf="filterOptions.price.from" matSuffix mat-icon-button aria-label="Clear"-->
+      <!--                (click)="filterOptions.price.from = 0;tableHandler()">-->
+      <!--          <mat-icon>close</mat-icon>-->
+      <!--        </button>-->
+      <!--      </mat-form-field>-->
+
+      <div class="custom-slider">
+        Rating
+        <ngx-slider
+
+          (userChange)="resetSearch();tableHandler()"
+          [(value)]="filterOptions.rating.from"
+          [(highValue)]="filterOptions.rating.to"
+          [options]="{
+          floor: 0,
+          ceil: 5,
+          step: 0.1
+        }"></ngx-slider>
+      </div>
+
+      <div class="custom-slider">
+        Price
+        <ngx-slider
+
+          (userChange)="resetSearch();tableHandler()"
+          [(value)]="filterOptions.price.from"
+          [(highValue)]="filterOptions.price.to"
+          [options]="{
+          floor: 0,
+          ceil: 9999,
+          step: 1
+        }"></ngx-slider>
+      </div>
+
+      <div class="custom-slider">
+        Sold pieces
+        <ngx-slider
+
+          (userChange)="resetSearch();tableHandler()"
+          [(value)]="filterOptions.soldPieces.from"
+          [(highValue)]="filterOptions.soldPieces.to"
+          [options]="{
+          floor: 0,
+          ceil: 9999,
+          step: 1
+        }"></ngx-slider>
+      </div>
+
+      <!--      СДелать две половинки слайдера, одну инвертировать, и склеить их вместе-->
 
       <!--      <mat-form-field appearance="fill">-->
       <!--        <mat-label>Availability</mat-label>-->

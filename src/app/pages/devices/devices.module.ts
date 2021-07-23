@@ -15,29 +15,31 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatSliderModule} from "@angular/material/slider";
 import {MatSelectModule} from "@angular/material/select";
+import {NgxSliderModule} from "@angular-slider/ngx-slider";
 
 
 @NgModule({
   declarations: [
     DevicesComponent
   ],
-  imports: [
-    CommonModule,
-    DevicesRoutingModule,
-    MatSortModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatFormFieldModule,
-    FormsModule,
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    MatBadgeModule,
-    MatExpansionModule,
-    MatSliderModule,
-    MatSelectModule,
-    ReactiveFormsModule
+    imports: [
+        CommonModule,
+        DevicesRoutingModule,
+        MatSortModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatFormFieldModule,
+        FormsModule,
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        MatBadgeModule,
+        MatExpansionModule,
+        MatSliderModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        NgxSliderModule
 
-  ]
+    ]
 })
 export class DevicesModule { }
