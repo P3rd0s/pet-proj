@@ -35,7 +35,6 @@ export class DeviceService {
   getParametrizedTable(sort?: Sort, filter?: FilterOptions, search?: string): Observable<Device[]> {
 
     return this.http.get<Device[]>(this.devicesURL).pipe(
-
       tap(() => this.log('get devices table with filters/sort/search')),
       catchError(this.handleError<Device[]>('get devices table with filters/sort/search', [])),
 
@@ -49,32 +48,35 @@ export class DeviceService {
           //Hardcode instead backend
           return devices.filter((d: Device) => {
 
-            if(filter.name !== '') {
-              if(d.deviceName.toLowerCase().indexOf(filter.name.toLowerCase()) === -1) return false
-            }
+            if (        //st line - check filter exist, nd line - filtering
+              //By name
+              (filter.name !== ''
+                && (d.deviceName.toLowerCase().indexOf(filter.name.toLowerCase()) === -1))
 
-            if(filter.price.from!=0 || filter.price.to!=9999) {
-              if(d.price < filter.price.from || d.price > filter.price.to) return false;
-            }
+              //By price
+              || ((filter.price.from != 0 || filter.price.to != 9999)
+              && (d.price < filter.price.from || d.price > filter.price.to))
 
-            if(filter.availability.length !== 0) {
-              let isOk = false;
-              for(let i of filter.availability) {
-                if(d.availability === i) {
-                  isOk = true; break;
+              //By sold pieces
+              || ((filter.soldPieces.from !== 0 || filter.soldPieces.to !== 9999)
+              && (d.soldPieces < filter.soldPieces.from || d.soldPieces > filter.soldPieces.to))
+
+              //By rating
+              || ((filter.rating.from != 0 || filter.rating.to != 5)
+              && (d.rating < filter.rating.from || d.rating > filter.rating.to))
+
+              || ((filter.availability.length !== 0)
+              && (() => {
+                let isOk = false;
+                for (let i of filter.availability) {
+                  if (d.availability === i) {
+                    isOk = true;
+                    break;
+                  }
                 }
-              }
-              if(!isOk) return false;
-            }
-
-            if(filter.soldPieces.from !== 0 || filter.soldPieces.to !== 9999) {
-              if(d.soldPieces < filter.soldPieces.from || d.soldPieces > filter.soldPieces.to) return false;
-            }
-
-            if(filter.rating.from!= 0 || filter.rating.to != 5) {
-              if(d.rating < filter.rating.from || d.rating > filter.rating.to) return false;
-            }
-
+                return !isOk;
+              })())
+            ) return false;
             return true;
           });
         } else return devices;
@@ -83,9 +85,7 @@ export class DeviceService {
 
       map(devices => sort
         ? devices.sort((d1: any, d2: any) => compare(d1[sort.active], d2[sort.active], sort.direction === 'asc'))
-        : devices),
-
-      take<Device[]>(1)
+        : devices)
     );
   }
 

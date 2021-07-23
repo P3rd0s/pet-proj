@@ -1,5 +1,5 @@
-<div class="find-box">
-  <mat-form-field class="form-field" appearance="fill">
+<div class="find-filter-box">
+  <mat-form-field class="search-form-field" appearance="fill">
     <mat-label>Search...</mat-label>
     <input matInput type="text" [(ngModel)]="searchText" (ngModelChange)="resetFilters();tableHandler()">
     <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear"
@@ -8,11 +8,15 @@
     </button>
   </mat-form-field>
 
+  <button (click)="resetFilters(); tableHandler()"
+          class="reset-filter-button" mat-stroked-button color="warn">
+    Reset filters
+  </button>
 
-  <mat-accordion class="headers-align" multi
+  <mat-accordion multi
                  matBadge="{{activeFilters()}}" matBadgePosition="before" matBadgeColor="warn">
     <mat-expansion-panel>
-      <mat-expansion-panel-header>
+      <mat-expansion-panel-header class="filter-header">
         <mat-panel-title>
           Set up filters
         </mat-panel-title>
@@ -31,15 +35,7 @@
         </button>
       </mat-form-field>
 
-      <!--      <mat-form-field class="form-field" appearance="fill">-->
-      <!--        <mat-label>Price</mat-label>-->
-      <!--        <input matInput type="number" [(ngModel)]="filterOptions.price.from"-->
-      <!--               (ngModelChange)="resetSearch();tableHandler()">-->
-      <!--        <button *ngIf="filterOptions.price.from" matSuffix mat-icon-button aria-label="Clear"-->
-      <!--                (click)="filterOptions.price.from = 0;tableHandler()">-->
-      <!--          <mat-icon>close</mat-icon>-->
-      <!--        </button>-->
-      <!--      </mat-form-field>-->
+
 
       <div class="custom-slider">
         Rating
@@ -72,7 +68,6 @@
       <div class="custom-slider">
         Sold pieces
         <ngx-slider
-
           (userChange)="resetSearch();tableHandler()"
           [(value)]="filterOptions.soldPieces.from"
           [(highValue)]="filterOptions.soldPieces.to"
@@ -83,14 +78,16 @@
         }"></ngx-slider>
       </div>
 
-      <!--      СДелать две половинки слайдера, одну инвертировать, и склеить их вместе-->
 
-      <!--      <mat-form-field appearance="fill">-->
-      <!--        <mat-label>Availability</mat-label>-->
-      <!--        <mat-select [formControl]="devicesAvails" multiple (ngModelChange)="filterDevice.availability=$event; tableHandler()">-->
-      <!--          <mat-option *ngFor="let avail of devicesAvailableList" [value]="avail">{{avail}}</mat-option>-->
-      <!--        </mat-select>-->
-      <!--      </mat-form-field>-->
+      <mat-form-field appearance="fill">
+        <mat-label>Availability</mat-label>
+        <mat-select #matSelect placeholder="Availability" multiple
+                    [formControl]="devicesAvails"
+                    (ngModelChange)="filterOptions.availability = devicesAvails.value;tableHandler()">
+          <mat-option (click)="resetSelectFilter()" [value]="[]">Reset</mat-option>
+          <mat-option *ngFor="let i of availVals" [value]="i">{{availKeys[i-1]}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
 
     </mat-expansion-panel>
