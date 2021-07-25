@@ -1,0 +1,178 @@
+
+table {
+  width: 100%;
+}
+
+
+.find-filter-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+
+  .reset-filter-button, .refresh-table-button {
+    margin: 15px 0;
+    height: 52px;
+  }
+
+  .reset-filter-button {
+    margin: 15px;
+  }
+
+  .search-form-field {
+    padding-top: 15px;
+    flex-grow: 1;
+  }
+}
+
+
+.filters-menu {
+  justify-content: space-between;
+  align-items: center;
+
+  .filter-panel {
+    margin-bottom: 15px;
+
+    ::ng-deep {
+
+      .mat-expansion-panel-body {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
+        align-items: center;
+      }
+
+      .name-form-field, .avail-form-field {
+        padding-top: 20px;
+
+        .mat-form-field-flex {
+          height: 50px;
+        }
+      }
+    }
+
+  }
+
+  .description-panel {
+    justify-content: space-between;
+  }
+}
+
+//SLIDERS, LATER WILL BE COMPLETE WITH ANGULAR THEMING
+// We need to use ::ng-deep to overcome view encapsulation
+::ng-deep {
+
+
+  .custom-slider {
+    width: 150px;
+    text-align: center;
+    position: relative;
+
+    .flex-input-filter {
+      display: flex;
+      justify-content: space-around;
+      position: absolute;
+      width: 100%;
+      top: 30px;
+
+      & > input {
+        padding-left: 3px;
+      }
+    }
+
+    .from-to-input {
+
+      width: 50px;
+      height: 21px;
+      border: solid 1px #673ab7;
+      border-radius: 2px;
+    }
+
+    .from-to-input::-webkit-inner-spin-button,
+    .from-to-input::-webkit-outer-spin-button {
+      margin: 0;
+      padding: 0;
+      height: 23px;
+    }
+
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-full-bar {
+    width: 140px;
+    left: 5px;
+  }
+
+  .custom-slider .ngx-slider-span .ngx-slider-bar {
+    background: #8b8b8b;
+    max-height: 2px !important;
+
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-selection {
+    background: #673ab7;
+    max-height: 2px;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-pointer {
+    background-color: #f0f0f0;
+    transform: scale(0.65);
+  }
+
+  .ngx-slider-model-value, .ngx-slider-model-high, .ngx-slider-floor, .ngx-slider-ceil, .ngx-slider-combined {
+    display: none !important;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-pointer:after {
+    background-color: #673ab7;
+  }
+
+}
+
+@media (max-width: 550px) {
+
+  //make nav-menu responsive
+  .find-filter-box {
+
+    .search-form-field {
+      width: 100%;
+    }
+
+    .reset-filter-button, .refresh-table-button {
+      width: 40%;
+      margin: 15px 15px;
+      height: 52px;
+    }
+  }
+
+  .filters-menu {
+    .filter-panel {
+      ::ng-deep {
+        .mat-expansion-panel-body {
+          display: flex;
+          flex-direction: column;
+          flex-wrap: nowrap;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+
+          & > * {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  ::ng-deep {
+    .custom-slider {
+      width: 100%;
+    }
+    .custom-slider .ngx-slider .ngx-slider-full-bar {
+      width: 100%;
+      left: 5px;
+    }
+  }
+}
