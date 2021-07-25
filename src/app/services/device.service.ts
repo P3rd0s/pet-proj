@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HistoryService} from "./history.service";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable, of} from "rxjs";
-import {Available, compare, Device, FilterOptions} from "../interfaces/device";
+import {About, Available, compare, Device, FilterOptions} from "../interfaces/device";
 import {catchError, tap, map, take} from "rxjs/operators";
 import {Sort} from "@angular/material/sort";
 
@@ -89,7 +89,35 @@ export class DeviceService {
     );
   }
 
+  public calcAbout(): Observable<About> {
+    let aboutData: About = {
+      midPrice: 0,
+      differentModels: 0,
+      soldDevices: 0,
+      availableDevices: 0,
+      midRating: 0};
+    return this.http.get<Device[]>(this.devicesURL).pipe(
+      map<Device[], About>(devices => {
+        devices.map(device => {
+          aboutData.midPrice += device.price;
+          aboutData.soldDevices += device.soldPieces;
+          aboutData.midRating += device.rating;
+          if(device.availability === Available.available) aboutData.availableDevices++;
+        })
+        let len = devices.length
+        aboutData.differentModels = len;
+        aboutData.midPrice = Math.floor(aboutData.midPrice/len);
+        aboutData.midRating = Number((aboutData.midRating/len).toFixed(1));
 
+        return aboutData;
+      })
+    )
+  }
+
+
+
+  //******************************************************************************************************************
+  //DEVICES' METHODS
   public getDevices(): Observable<Device[]> {
     return this.http.get<Device[]>(this.devicesURL).pipe(
       tap(() => this.log('get devices')),

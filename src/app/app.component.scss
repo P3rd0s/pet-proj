@@ -22,7 +22,7 @@ h1.app-name {
   /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
      causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
   flex: 1;
-  margin-top: 68px;
+  margin-top: 60px;
 }
 
 .sidenav {
@@ -32,10 +32,6 @@ h1.app-name {
   font-size: 25px;
   text-align: center;
   padding-top: 15px;
-}
-
-.main-content {
-  padding: 20px;
 }
 
 @media (max-width: 600px) {

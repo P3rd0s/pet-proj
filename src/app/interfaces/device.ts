@@ -21,6 +21,14 @@ export interface FilterOptions {
   rating: {from: number, to:number}
 }
 
+export interface About {
+  midPrice: number,
+  differentModels: number,
+  soldDevices: number,
+  availableDevices: number,
+  midRating: number
+}
+
 export function compare(a: number | string, b: number | string, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

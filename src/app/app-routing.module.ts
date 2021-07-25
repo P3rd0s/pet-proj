@@ -3,8 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {path: '', redirectTo: 'devices', pathMatch: 'full'},
+  { path: 'device/:id', loadChildren: () => import('./pages/device/device.module').then(m => m.DeviceModule) },
   { path: 'aboutus', loadChildren: () => import('./pages/aboutus/aboutus.module').then(m => m.AboutusModule) },
   { path: 'devices', loadChildren: () => import('./pages/devices/devices.module').then(m => m.DevicesModule) }
+
 ];
 
 
