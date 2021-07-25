@@ -13,9 +13,16 @@
     Reset filters
   </button>
 
-  <mat-accordion multi
-                 matBadge="{{activeFilters()}}" matBadgePosition="before" matBadgeColor="warn">
-    <mat-expansion-panel>
+  <button (click)="tableHandler()"
+          class="refresh-table-button" mat-stroked-button color="primary">
+    <mat-icon>autorenew</mat-icon>
+  </button>
+
+</div>
+
+<div matBadge="{{activeFilters()}}" matBadgePosition="before" matBadgeColor="warn">
+  <mat-accordion multi class="filters-menu">
+    <mat-expansion-panel class="filter-panel">
       <mat-expansion-panel-header class="filter-header">
         <mat-panel-title>
           Set up filters
@@ -35,10 +42,36 @@
         </button>
       </mat-form-field>
 
-
+      <mat-form-field class="avail-form-field" appearance="fill">
+        <mat-label>Availability</mat-label>
+        <mat-select #matSelect placeholder="Availability" multiple
+                    [formControl]="devicesAvails"
+                    (ngModelChange)="filterOptions.availability = devicesAvails.value;resetSearch();tableHandler()">
+          <mat-option (click)="resetSelectFilter()" [value]="[]">Reset</mat-option>
+          <mat-option *ngFor="let i of availVals" [value]="i">{{availKeys[i - 1]}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <div class="custom-slider">
-        Rating
+        <p>Rating</p>
+
+        <div class="flex-input-filter">
+          <input class="from-to-input" type="number" step="0.1" inputmode="decimal" min="0" max="5" matInput
+                 placeholder="0"
+                 value="{{filterOptions.rating.from}}"
+                 [(ngModel)]="filterOptions.rating.from"
+                 (ngModelChange)="resetSearch();tableHandler()"
+                 [formControl]="ratingFromControl"
+          >
+          <input class="from-to-input" type="number" step="0.1" inputmode="decimal" min="0" max="5" matInput
+                 placeholder="5"
+                 value="{{filterOptions.rating.to}}"
+                 [(ngModel)]="filterOptions.rating.to"
+                 (ngModelChange)="resetSearch();tableHandler()"
+                 [formControl]="ratingToControl"
+          >
+        </div>
+
         <ngx-slider
 
           (userChange)="resetSearch();tableHandler()"
@@ -52,7 +85,27 @@
       </div>
 
       <div class="custom-slider">
-        Price
+
+        <p>Price</p>
+
+        <div class="flex-input-filter">
+          <input class="from-to-input" type="number" step="1" inputmode="decimal" min="0" max="9999" matInput
+                 placeholder="0"
+                 value="{{filterOptions.price.from}}"
+                 [(ngModel)]="filterOptions.price.from"
+                 (ngModelChange)="resetSearch();tableHandler()"
+                 [formControl]="priceFromControl"
+          >
+          <input class="from-to-input" type="number" step="1" inputmode="decimal" min="0" max="9999" matInput
+                 placeholder="9999"
+                 value="{{filterOptions.price.to}}"
+                 [(ngModel)]="filterOptions.price.to"
+                 (ngModelChange)="resetSearch();tableHandler()"
+                 [formControl]="priceToControl"
+          >
+        </div>
+
+
         <ngx-slider
 
           (userChange)="resetSearch();tableHandler()"
@@ -66,7 +119,26 @@
       </div>
 
       <div class="custom-slider">
-        Sold pieces
+
+        <p>Sold pieces</p>
+
+        <div class="flex-input-filter">
+          <input class="from-to-input" type="number" step="1" inputmode="decimal" min="0" max="9999" matInput
+                 placeholder="0"
+                 value="{{filterOptions.soldPieces.from}}"
+                 [(ngModel)]="filterOptions.soldPieces.from"
+                 (ngModelChange)="resetSearch();tableHandler()"
+                 [formControl]="soldPiecesFromControl"
+          >
+          <input class="from-to-input" type="number" step="1" inputmode="decimal" min="0" max="9999" matInput
+                 placeholder="9999"
+                 value="{{filterOptions.soldPieces.to}}"
+                 [(ngModel)]="filterOptions.soldPieces.to"
+                 (ngModelChange)="resetSearch();tableHandler()"
+                 [formControl]="soldPiecesToControl"
+          >
+        </div>
+
         <ngx-slider
           (userChange)="resetSearch();tableHandler()"
           [(value)]="filterOptions.soldPieces.from"
@@ -78,23 +150,9 @@
         }"></ngx-slider>
       </div>
 
-
-      <mat-form-field appearance="fill">
-        <mat-label>Availability</mat-label>
-        <mat-select #matSelect placeholder="Availability" multiple
-                    [formControl]="devicesAvails"
-                    (ngModelChange)="filterOptions.availability = devicesAvails.value;tableHandler()">
-          <mat-option (click)="resetSelectFilter()" [value]="[]">Reset</mat-option>
-          <mat-option *ngFor="let i of availVals" [value]="i">{{availKeys[i-1]}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-
     </mat-expansion-panel>
   </mat-accordion>
-
 </div>
-
 <div class="mat-elevation-z5">
 
   <table mat-table [dataSource]="dataSource" matSort (matSortChange)="this.sortBy=$event;tableHandler()">

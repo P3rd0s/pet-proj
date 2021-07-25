@@ -32,7 +32,7 @@ export class DeviceService {
   }
 
 
-  getParametrizedTable(sort?: Sort, filter?: FilterOptions, search?: string): Observable<Device[]> {
+  public getParametrizedTable(sort?: Sort, filter?: FilterOptions, search?: string): Observable<Device[]> {
 
     return this.http.get<Device[]>(this.devicesURL).pipe(
       tap(() => this.log('get devices table with filters/sort/search')),
@@ -90,7 +90,7 @@ export class DeviceService {
   }
 
 
-  getDevices(): Observable<Device[]> {
+  public getDevices(): Observable<Device[]> {
     return this.http.get<Device[]>(this.devicesURL).pipe(
       tap(() => this.log('get devices')),
       catchError(this.handleError<Device[]>('get devices', []))
@@ -98,7 +98,7 @@ export class DeviceService {
   }
 
 
-  getDevice(id: number): Observable<Device> {
+  public getDevice(id: number): Observable<Device> {
     const deviceURL = `${this.devicesURL}/${id}`;
     return this.http.get<Device>(deviceURL).pipe(
       tap(() => this.log(`get device id=${id}`)),
@@ -107,15 +107,15 @@ export class DeviceService {
   }
 
 
-  updateDevice(device: Device): Observable<any> {
-    return this.http.put(this.devicesURL, device, this.httpOptions).pipe(
+  public updateDevice(device: Device): Observable<Device> {
+    return this.http.put<Device>(this.devicesURL, device, this.httpOptions).pipe(
       tap(() => this.log(`updated device id=${device.id}`)),
       catchError(this.handleError<any>(`update device id=${device.id}`))
     );
   }
 
 
-  addDevice(device: Device): Observable<Device> {
+  public addDevice(device: Device): Observable<Device> {
     return this.http.post<Device>(this.devicesURL, device, this.httpOptions).pipe(
       tap((newDevice: Device) => this.log(`added device id=${newDevice.id}`)),
       catchError(this.handleError<any>(`added device id=${device.id}`))
@@ -123,15 +123,15 @@ export class DeviceService {
   }
 
 
-  deleteDevice(id: number): Observable<Device> {
+  public deleteDevice(id: number): void {
     const deviceURL = `${this.devicesURL}/${id}`;
-    return this.http.delete<Device>(deviceURL, this.httpOptions).pipe(
+    this.http.delete<Device>(deviceURL, this.httpOptions).pipe(
       tap(() => this.log(`deleted device id=${id}`)),
       catchError(this.handleError<Device>(`deleted device`))
     );
   }
 
-  constructor(private http: HttpClient,
+  public constructor(private http: HttpClient,
               private historyService: HistoryService) {
   }
 }

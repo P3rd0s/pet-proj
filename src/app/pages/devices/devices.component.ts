@@ -1,11 +1,10 @@
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Device, compare, Available, FilterOptions} from "../../interfaces/device";
-import {Subscription} from "rxjs";
 import {DeviceService} from "../../services/device.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort, Sort} from "@angular/material/sort";
-import {FormControl} from "@angular/forms";
+import {FormControl, Validators} from "@angular/forms";
 import {MatSelect} from "@angular/material/select";
 import {MatOption} from "@angular/material/core";
 import {take} from "rxjs/operators";
@@ -16,21 +15,18 @@ import {take} from "rxjs/operators";
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.scss']
 })
-export class DevicesComponent implements OnInit, OnDestroy {
-
-  //Subscriptions
-  subscriptions: Subscription[] = [];
+export class DevicesComponent implements OnInit {
 
   //Table-columns
-  displayedColumns: string[] = ['id', 'deviceName', 'rating', 'price'];
+  public displayedColumns: string[] = ['id', 'deviceName', 'rating', 'price'];
 
   //Table data
-  dataSource: any = [];
+  public dataSource: any = [];
 
   //Table searching, sorting and filtering
-  searchText: string = '';
-  sortBy?: Sort;
-  filterOptions: FilterOptions = {
+  public searchText: string = '';
+  public sortBy?: Sort;
+  public filterOptions: FilterOptions = {
     name: '',
     price: {from: 0, to: 9999},
     availability: [],
@@ -38,15 +34,22 @@ export class DevicesComponent implements OnInit, OnDestroy {
     rating: {from: 0, to: 5}
   };
 
-  devicesAvails = new FormControl();
-  availKeys: string[] = ['Available', 'Expected', 'Not available'];
-  availVals: number[] = (() => {
+  //Form Controls
+  public devicesAvails = new FormControl();
+  public availKeys: string[] = ['Available', 'Expected', 'Not available'];
+  public availVals: number[] = (() => {
     let result: any[] = [];
     for (let i in Available)
       result.push(parseInt(i, 10));
     return result.splice(0, Object.keys(Available).length / 2);
   })();
 
+  public ratingFromControl = new FormControl('', [Validators.max(5), Validators.min(0)])
+  public ratingToControl = new FormControl('', [Validators.max(5), Validators.min(0)])
+  public priceFromControl = new FormControl('', [Validators.max(9999), Validators.min(0)])
+  public priceToControl = new FormControl('', [Validators.max(9999), Validators.min(0)])
+  public soldPiecesFromControl = new FormControl('', [Validators.max(9999), Validators.min(0)])
+  public soldPiecesToControl = new FormControl('', [Validators.max(9999), Validators.min(0)])
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
   @ViewChild(MatSort) sort?: MatSort;
@@ -60,12 +63,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
     this.tableHandler();
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
-    this.subscriptions = [];
-  }
-
-  resetFilters(): void {
+  public resetFilters(): void {
     this.filterOptions = {
       name: '',
       price: {from: 0, to: 9999},
@@ -75,7 +73,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
     };
   }
 
-  activeFilters(): number {
+  public activeFilters(): number {
     let active = 0;
     this.filterOptions.name !== '' ? active++ : {};
     this.filterOptions.price.from != 0 || this.filterOptions.price.to != 9999 ? active++ : {};
@@ -85,18 +83,16 @@ export class DevicesComponent implements OnInit, OnDestroy {
     return active;
   };
 
-  resetSearch(): void {
+  public resetSearch(): void {
     this.searchText = '';
   }
 
-  resetSelectFilter(): void {
+  public resetSelectFilter(): void {
     this.matSelect?.options.forEach((data: MatOption) => data.deselect());
   }
 
-  tableHandler(): void {
+  public tableHandler(): void {
     if (this.paginator) this.paginator.pageIndex = 0;
-
-    console.log(this.filterOptions.availability);
 
     this.deviceService
       .getParametrizedTable(this.sortBy, this.activeFilters() > 0 ? this.filterOptions : undefined, this.searchText)
